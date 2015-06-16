@@ -5,19 +5,28 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
+import android.graphics.PointF;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+/*
+    Demo how to use Animation
+ */
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
@@ -162,6 +171,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             ObjectAnimator animator = ObjectAnimator.ofFloat(imageViewList.get(i), "translationY", i*50, 0);
             animator.setDuration(500);
             animator.setStartDelay(i * 300);
+            animator.setInterpolator(new BounceInterpolator());
             animator.start();
         }
         flag = true;
@@ -172,8 +182,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             ObjectAnimator animator = ObjectAnimator.ofFloat(imageViewList.get(i), "translationY", 0F, i*50);
             animator.setDuration(500);
             animator.setStartDelay(i * 300);
+            animator.setInterpolator(new BounceInterpolator());
             animator.start();
         }
         flag = false;
+    }
+
+    public void click2(View view) {
+        final Button button = (Button) view;
+        final ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
+        valueAnimator.setDuration(10000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer v = (Integer) animation.getAnimatedValue();
+                button.setText("" + v);
+            }
+        });
+        valueAnimator.start();
+
+        // Just a sample code to demo how to extend the ValueAnimator
+        ValueAnimator valueAnimator1 = ValueAnimator.ofObject(new TypeEvaluator<PointF>() {
+            @Override
+            public PointF evaluate(float fraction, PointF startValue, PointF endValue) {
+                return null;
+            }
+        });
     }
 }
